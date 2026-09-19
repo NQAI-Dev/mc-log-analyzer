@@ -4,7 +4,8 @@ These tests guard the existing regex heuristics and pin the public Issue shape.
 Add a rule and you must add a positive test here; remove a rule and the matching
 test breaks loudly instead of silently.
 """
-from analyzer import analyze_log, Issue, RULES
+
+from analyzer import RULES, Issue, analyze_log
 
 
 def _issue_ids(issues):
@@ -124,4 +125,5 @@ def test_rule_ids_match_issue_ids():
 def test_issue_is_dataclass():
     """Issue must stay a dataclass — callers may rely on field access."""
     from dataclasses import is_dataclass
+
     assert is_dataclass(Issue)

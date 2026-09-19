@@ -50,7 +50,7 @@ Add a new rule:
     "id": "my_rule",
     "pattern": re.compile(r"my regex", re.IGNORECASE),
     "title": "Human title",
-    "severity": "WARNING",   # one of CRITICAL, ERROR, WARNING
+    "severity": "WARNING",  # one of CRITICAL, ERROR, WARNING
     "cause": "Why it happens",
     "solution": "How to fix it",
 }
