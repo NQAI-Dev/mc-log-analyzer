@@ -163,6 +163,3 @@ if __name__ == "__main__":
             print(f"[{i.severity}] {i.id}: {i.title}")
             print(f"  cause: {i.cause}")
             print(f"  fix:   {i.solution}")
-    # ponytail: smoke check survives — keep a sentinel assertion in the CLI path.
-    sample = "java.lang.OutOfMemoryError: Java heap space\nAddress already in use: bind"
-    assert len(analyze_log(sample)) == 2

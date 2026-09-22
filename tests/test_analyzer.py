@@ -5,11 +5,46 @@ Add a rule and you must add a positive test here; remove a rule and the matching
 test breaks loudly instead of silently.
 """
 
+import json
+import subprocess
+import sys
+
 from analyzer import RULES, Issue, analyze_log
 
 
 def _issue_ids(issues):
     return [i.id for i in issues]
+
+
+def test_cli_json_output_is_machine_readable(tmp_path):
+    logfile = tmp_path / "latest.log"
+    logfile.write_text("java.lang.OutOfMemoryError: Java heap space\n", encoding="utf-8")
+
+    result = subprocess.run(
+        [sys.executable, "analyzer.py", str(logfile), "--format", "json"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    payload = json.loads(result.stdout)
+    assert [issue["id"] for issue in payload] == ["oom_heap"]
+    assert result.stderr == ""
+
+
+def test_cli_text_output_reports_no_issues_for_benign_log(tmp_path):
+    logfile = tmp_path / "latest.log"
+    logfile.write_text("[Server thread/INFO]: Done loading world\n", encoding="utf-8")
+
+    result = subprocess.run(
+        [sys.executable, "analyzer.py", str(logfile)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.stdout == "No issues detected.\n"
+    assert result.stderr == ""
 
 
 def test_benign_log_produces_no_issues():
